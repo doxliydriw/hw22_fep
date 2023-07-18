@@ -119,16 +119,20 @@ const myform = document.getElementById('form');
 const fnameElement = myform.elements["fname"];
 const lnameElement = myform.elements['lname'];
 const paymentElement = myform.elements['payment'];
+const quantityElement = myform.elements['quantity'];
 const cityElement = myform.elements['city'];
 const addressElement = myform.elements['address'];
+const commentsElement = myform.elements['comment'];
 const radioError = document.querySelector('.radio-header')
 res = []
 
 const FNAME_ERROR = 'Please input first name';
 const LNAME_ERROR = 'Please input last name';
 const payment_ERROR = 'Please indicate your payment';
+const quantity_ERROR = 'Please enter product quantity';
 const CITY_ERROR = 'Please check your city of living';
 const ADDRESS_ERROR = 'Please input your address';
+const COMMENTS_ERROR = 'Please input your comments';
 
 
 window.onload = () => {
@@ -214,7 +218,7 @@ function ShowSuccess(elem, msg) {
     errorAlert.textContent = '';
     elem.classList.remove('.active');
 }
-
+///Validate NAME ///
 function validateFname(el, message) {
     // console.log(el)
     if (el.value !== "") {
@@ -228,6 +232,7 @@ function validateFname(el, message) {
     }
 }
 
+///Validate LASTNAME ///
 function validateLname(el, message) {
     // console.log(el)
     if (el.value !== "") {
@@ -241,6 +246,7 @@ function validateLname(el, message) {
     }
 }
 
+///Validate PAYMENT ///
 function validatepayment(el, message) {
     let selectedpayment;
     for (const radio of el) {
@@ -249,7 +255,7 @@ function validatepayment(el, message) {
         }
     }
     if (selectedpayment) {
-        res.push(['Your payment:', selectedpayment]);
+        res.push(['Way of payment:', selectedpayment]);
         ShowSuccess(radioError, message);
         return true;
     }
@@ -257,9 +263,26 @@ function validatepayment(el, message) {
     return false;
 }
 
+
+///Validate QUANTITY ///
+function validatequantity(el, message) {
+    console.log()
+    let qty = el.valueAsNumber;
+    if (qty > 0) {
+        res.push(['Ordered quantity:', qty]);
+        ShowSuccess(radioError, message);
+        return true;
+    }
+    ShowError(radioError, message);
+    return false;
+}
+
+
+
+///Validate CITY ///
 function validateCity(el, message) {
     if (el.selectedIndex != 0) {
-        res.push(['Your city:', el.value]);
+        res.push(['City of delivery:', el.value]);
         ShowSuccess(el, message);
         return true;
     }
@@ -267,10 +290,25 @@ function validateCity(el, message) {
     return false;
 }
 
+///Validate NOVA POSHTA ///
 function validateAddress(el, message) {
     // console.log(el)
     if (el.value !== "") {
-        res.push(['Your address:', el.value]);
+        res.push(['Nova poshta brunch:', el.value]);
+        ShowSuccess(el, message);
+        return true;
+    } else {
+        // console.log(el, FNAME_ERROR);
+        ShowError(el, message);
+        return false;
+    }
+}
+
+///Validate COMMENTS///
+function validateComments(el, message) {
+    // console.log(el)
+    if (el.value !== "") {
+        res.push(['Comments:', el.value]);
         ShowSuccess(el, message);
         return true;
     } else {
@@ -288,7 +326,7 @@ function datatable() {
     section.appendChild(table);
     thead = document.createElement('th');
     thead.setAttribute('colspan', 2);
-    thead.textContent = 'Your data';
+    thead.textContent = 'Your order details';
     table.appendChild(thead);
     for (i of res) {
         const row = document.createElement('tr');
@@ -314,10 +352,12 @@ myform.addEventListener('submit', (event) => {
     const isFnameValid = validateFname(fnameElement, FNAME_ERROR);
     const isLnameValid = validateLname(lnameElement, LNAME_ERROR);
     const ispaymentValid = validatepayment(paymentElement, payment_ERROR);
+    const isquantityValid = validatequantity(quantityElement, quantity_ERROR);
     const isCityValid = validateCity(cityElement, CITY_ERROR);
     const isAddressValid = validateAddress(addressElement, ADDRESS_ERROR);
+    const isCommentsValid = validateComments(commentsElement, COMMENTS_ERROR);
 
-    if (isFnameValid && isLnameValid && ispaymentValid && isCityValid && isAddressValid) {
+    if (isFnameValid && isLnameValid && ispaymentValid && isquantityValid && isCityValid && isAddressValid && isCommentsValid) {
         res.push(["Product: ", currentProd[0].product]);
         console.log('Submit');
         datatable();

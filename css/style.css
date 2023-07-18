@@ -39,6 +39,7 @@ li {
 
 #form {
   display: none;
+  min-width: 300px;
   justify-items: start;
   row-gap: 20px;
   margin-bottom: 30px;
@@ -57,4 +58,12 @@ table,
 th,
 td {
   border: 1px solid black;
+}
+
+table {
+  min-width: 500px;
+}
+
+.form_sec {
+  min-width: 500px;
 }
